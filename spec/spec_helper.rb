@@ -2,6 +2,7 @@ require 'rubygems'
 require 'bundler'
 Bundler.setup
 
+require 'rspec'
 require 'bbcoder'
 
 RSpec.configure do |config|

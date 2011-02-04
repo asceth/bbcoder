@@ -22,5 +22,26 @@ describe BBCoder::BufferTags do
       subject.criteria_met?(:p).should == true
     end
   end
+
+  context "delegation to _internal" do
+    it "#size" do
+      mock(subject)._internal.stub!.size
+      subject.size
+    end
+
+    it "#empty?" do
+      mock(subject)._internal.stub!.empty?
+      subject.empty?
+    end
+    it "#last" do
+      mock(subject)._internal.stub!.last
+      subject.last
+    end
+
+    it "#include?" do
+      mock(subject)._internal.stub!.include?
+      subject.include?(:p)
+    end
+  end
 end
 
