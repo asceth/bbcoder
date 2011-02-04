@@ -32,14 +32,16 @@ class BBCoder
         buffer.push(BBCoder::Tag.to_html(_internal.pop, _meta.delete(size+1), buffer.pop(+1)))
       elsif include?(tag)
         # repeats pop(tag) until we reach the last == tag
-        buffer.push([BBCoder::Tag.reform(_internal.pop, _meta.delete(size+1)), buffer.pop(+1)].join)
+        buffer.push(join(+1))
         pop(tag)
       end
     end
 
     # orphaned open tags are combined
-    def join
-      1.upto(size).to_a.collect do
+    def join(limit = nil)
+      limit = size if limit.nil?
+
+      1.upto(limit).to_a.collect do
         [BBCoder::Tag.reform(_internal.pop, _meta.delete(size+1)), buffer.pop(+1)].join  # +1 depth modifier for the buffer
       end.reverse.join
     end
@@ -65,9 +67,11 @@ class BBCoder
     def criteria_met?(tag)
       return false if BBCoder.configuration[tag].nil?
 
-      required_parents = BBCoder.configuration[tag].parents
+      parent_criteria_met?(BBCoder.configuration[tag].parents)
+    end
 
-      required_parents.empty? || !(_internal & required_parents).empty?
+    def parent_criteria_met?(parents)
+      parents.empty? || !(_internal & parents).empty?
     end
   end
 end

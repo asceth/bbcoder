@@ -18,7 +18,7 @@ class BBCoder
   end
 
   def parse
-     raw.each do |data|
+    raw.each do |data|
       case data
       when /\[\/([^\]]+)\]/
         buffer.tags.pop($1.to_sym)

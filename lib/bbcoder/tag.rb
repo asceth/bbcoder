@@ -8,19 +8,24 @@ class BBCoder
     end
 
     def to_html(meta, content)
-      if options[:match].nil? || content.match(options[:match])
-        if options[:block].nil?
-          "<#{options[:as]}>#{content}</#{options[:as]}>"
-        else
-          options[:block].binding.eval <<-EOS
-            @meta = "#{meta}"
-            @content = "#{content}"
-          EOS
-          options[:block].call
-        end
+      return self.class.reform(name, meta, content) unless content_valid?(content)
+
+
+      if options[:block].nil?
+        "<#{options[:as]}>#{content}</#{options[:as]}>"
       else
-        self.class.reform(name, meta, content)
+        options[:block].binding.eval <<-EOS
+          @meta = "#{meta}"
+          @content = "#{content}"
+        EOS
+        options[:block].call
       end
+    end
+
+    def content_valid?(content)
+      return true if options[:match].nil?
+
+      return !content.match(options[:match]).nil?
     end
 
     def parents
