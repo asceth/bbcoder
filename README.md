@@ -1,14 +1,16 @@
-bbcoder
-===========
-
-bbcode conversion to html for ruby
-
 Features
 --------
 
 * Non-regex based (except for the split)
+* Handles deep nesting of tags
+* Generates good html even from bad input
+* Easy configuration to add new tags
 
-Examples
+* Tags supported:
+
+p, b, i, u, s, del, ins, ol, ul, li, dl, dt, dd, quote, code, spoiler, url, img
+
+Usage
 --------
 
     BBCoder.new(text).to_html
@@ -18,35 +20,57 @@ Examples
 Install
 -------
 
-* sudo gem install bbcoder
+    gem install bbcoder
+
+
+Configuration
+-----------------------
+
+    BBCoder.configure do
+      tag :b, :as => :strong
+
+      tag :ul
+      tag :ol
+      tag :li, :parents => [:ol, :ul]
+
+      tag :img, :match => /^.*(png|bmp|jpg|gif)$/ do
+        %(<a href="#{content}"><img src="#{content}" /></a>)
+      end
+
+      tag :code do
+        <<-EOS
+    <div class="bbcode-code #{meta}">
+      <pre>#{content}</pre>
+    </div>
+        EOS
+      end
+
+      tag :url do
+        if meta.nil? || meta.empty?
+          %(<a href="#{content}">#{content}</a>)
+        else
+          %(<a href="#{meta}">#{content}</a>)
+        end
+      end
+    end
+
+
+Options for #tag
+
+* :as (symbol) -> use this as the html element ([b] becomes <strong>)
+* :match (regex) -> convert this tag and its content to html only if the content matches the regex
+* :parents ([symbol]) -> ignore this tag if there is no open tag that matches its parents
+
+
+When you pass a block to #tag it is expecting you to return a string.  You have two variables available to your block:
+
+* meta -> Everything after the '=' in the opening tag (with [quote="Legendary"] meta returns '"Legendary"' and with [quote] meta returns nil)
+* content -> Everything between the two tags (with [b]strong arm[/b] content returns 'strong arm')
+
 
 Author
 ------
 
 Original author: John "asceth" Long
 
-License
--------
 
-(The MIT License)
-
-Copyright (c) 2011 John "asceth" Long
-
-Permission is hereby granted, free of charge, to any person obtaining
-a copy of this software and associated documentation files (the
-'Software'), to deal in the Software without restriction, including
-without limitation the rights to use, copy, modify, merge, publish,
-distribute, sublicense, and/or sell copies of the Software, and to
-permit persons to whom the Software is furnished to do so, subject to
-the following conditions:
-
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
-CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
-TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
