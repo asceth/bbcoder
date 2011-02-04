@@ -57,7 +57,7 @@ Configuration
 
 Options for #tag
 
-* :as (symbol) -> use this as the html element ([b] becomes <strong>)
+* :as (symbol) -> use this as the html element ([b] becomes strong)
 * :match (regex) -> convert this tag and its content to html only if the content matches the regex
 * :parents ([symbol]) -> ignore this tag if there is no open tag that matches its parents
 
