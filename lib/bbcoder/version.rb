@@ -1,3 +1,3 @@
-module BBCoder
+class BBCoder
   VERSION = "0.1.0"
 end
