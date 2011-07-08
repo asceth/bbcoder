@@ -15,8 +15,8 @@ class BBCoder
         "<#{options[:as]}>#{content}</#{options[:as]}>"
       else
         options[:block].binding.eval <<-EOS
-          @meta = "#{meta}"
-          @content = "#{content}"
+          @meta = %Q{#{meta}}
+          @content = %Q{#{content}}
         EOS
         options[:block].call
       end
