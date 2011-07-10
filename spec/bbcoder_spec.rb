@@ -2,6 +2,34 @@ require 'spec_helper'
 
 describe BBCoder do
 
+  context "with dirty input" do
+    it "should parse content with \" in it" do
+      '[p]Text phrase: "going away"[/p]'.bbcode_to_html.should == '<p>Text phrase: "going away"</p>'
+    end
+
+    it "should parse content with { in it" do
+      '[p]OMG :-{[/p]'.bbcode_to_html.should == '<p>OMG :-{</p>'
+    end
+
+    it "should parse content with } in it" do
+      '[p]OMG :-}[/p]'.bbcode_to_html.should == '<p>OMG :-}</p>'
+    end
+
+    it "should parse content with } in it round 2" do
+      string = "[quote=weedman]YES I STICKY IT ALL oF YOU WHO DON'T LIKE it SEND YOUR HATE HERE\n\nhttp://www.gamesyn.com/plugin.php?plugin=PrivateMessages&file=message_send.php&id=20&tid=1583\n\n:} have a good day[/quote]"
+
+      result = <<-EOS
+<fieldset>
+<legend>weedman says</legend>
+  <blockquote>
+    YES I STICKY IT ALL oF YOU WHO DON\'T LIKE it SEND YOUR HATE HERE\n\nhttp://www.gamesyn.com/plugin.php?plugin=PrivateMessages&file=message_send.php&id=20&tid=1583\n\n:} have a good day
+  </blockquote>
+</fieldset>
+EOS
+      string.bbcode_to_html.should == result
+    end
+  end
+
   context "with properly formatted input" do
     it "should parse paragraph statements" do
       "[p]Text and now [p]nested.[/p][/p]".bbcode_to_html.should == "<p>Text and now <p>nested.</p></p>"
