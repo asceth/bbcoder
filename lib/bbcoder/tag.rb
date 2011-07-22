@@ -8,7 +8,7 @@ class BBCoder
     end
 
     def to_html(meta, content)
-      return self.class.reform(name, meta, content) unless content_valid?(content)
+      return self.class.reform(name, meta, content, true) unless content_valid?(content)
 
 
       if options[:block].nil?
@@ -23,6 +23,7 @@ class BBCoder
     end
 
     def content_valid?(content)
+      return false if content.nil?
       return true if options[:match].nil?
 
       return !content.match(options[:match]).nil?
@@ -37,8 +38,8 @@ class BBCoder
         BBCoder.configuration[tag].to_html(meta, content)
       end
 
-      def reform(tag, meta, content = nil)
-        if content.nil?
+      def reform(tag, meta, content = nil, force_end = false)
+        if content.nil? && !force_end
           %(#{reform_open(tag, meta)})
         else
           %(#{reform_open(tag, meta)}#{content}#{reform_end(tag)})

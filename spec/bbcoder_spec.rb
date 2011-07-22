@@ -28,6 +28,10 @@ describe BBCoder do
 EOS
       string.bbcode_to_html.should == result
     end
+
+    it "should return tags as text on blank content" do
+      '[img][/img]'.bbcode_to_html.should == '[img][/img]'
+    end
   end
 
   context "with properly formatted input" do
