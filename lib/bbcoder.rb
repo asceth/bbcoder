@@ -59,5 +59,11 @@ BBCoder.configure do
   tag :img, :match => /^.*(png|bmp|jpg|gif)$/ do
     %(<a href="#{content}"><img src="#{content}" /></a>)
   end
+
+  tag :youtube do
+    <<-EOS
+<iframe width="560" height="349" src="http://www.youtube.com/embed/#{content}" frameborder="0" allowfullscreen></iframe>
+    EOS
+  end
 end
 
