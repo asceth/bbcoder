@@ -58,6 +58,10 @@ EOS
     it "should handle multiple nestings of b elements" do
       "[b]Now I [b] am [b] extremely [b] bold![/b][/b][/b][/b]".bbcode_to_html.should == "<strong>Now I <strong> am <strong> extremely <strong> bold!</strong></strong></strong></strong>"
     end
+
+    it "should not drop the equal sign in meta" do
+      "[url=http://example.com/?Foo=Bar]Link[/url]".bbcode_to_html.should == "<a href=\"http://example.com/?Foo=Bar\">Link</a>"
+    end
   end
 
   context "with incorrectly formatted input" do

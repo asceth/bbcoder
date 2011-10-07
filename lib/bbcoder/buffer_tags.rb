@@ -11,7 +11,7 @@ class BBCoder
     def push(tag)
       tag, meta = if tag.include?("=")
                     splits = tag.split("=")
-                    [splits.shift.downcase.to_sym, splits.join]
+                    [splits.shift.downcase.to_sym, splits.join('=')]
                   else
                     [tag.downcase.to_sym, nil]
                   end
