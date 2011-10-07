@@ -89,5 +89,15 @@ EOS
       "[p]Text and [/b] with a [p] and [quote='Hahah'] a [/p] care in sight oh [i=nometaforyou] my [/b].".bbcode_to_html.should == "[p]Text and [/b] with a <p> and [quote='Hahah'] a </p> care in sight oh [i=nometaforyou] my [/b]."
     end
   end
+
+  context "with case-insensitive input" do
+    it "should handle upper case tags" do
+      "[P]Text and now [B]nested.[/B][/P]".bbcode_to_html.should == "<p>Text and now <strong>nested.</strong></p>"
+    end
+
+    it "should handle mixed upper and lower case tags" do
+      "[p]Text and now [B]nested.[/b][/P]".bbcode_to_html.should == "<p>Text and now <strong>nested.</strong></p>"
+    end
+  end
 end
 
