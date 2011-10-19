@@ -21,7 +21,7 @@ class BBCoder
     raw.each do |data|
       case data
       when /\[\/([^\]]+)\]/
-        buffer.tags.pop($1.to_sym)
+        buffer.tags.pop($1)
       when /\[([^\]]+)\]/
         buffer.tags.push($1)
       else

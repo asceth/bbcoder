@@ -58,6 +58,10 @@ EOS
     it "should handle multiple nestings of b elements" do
       "[b]Now I [b] am [b] extremely [b] bold![/b][/b][/b][/b]".bbcode_to_html.should == "<strong>Now I <strong> am <strong> extremely <strong> bold!</strong></strong></strong></strong>"
     end
+
+    it "should not drop the equal sign in meta" do
+      "[url=http://example.com/?Foo=Bar]Link[/url]".bbcode_to_html.should == "<a href=\"http://example.com/?Foo=Bar\">Link</a>"
+    end
   end
 
   context "with incorrectly formatted input" do
@@ -87,6 +91,16 @@ EOS
 
     it "shouldn't choke on extremely bad input with meta weirdness" do
       "[p]Text and [/b] with a [p] and [quote='Hahah'] a [/p] care in sight oh [i=nometaforyou] my [/b].".bbcode_to_html.should == "[p]Text and [/b] with a <p> and [quote='Hahah'] a </p> care in sight oh [i=nometaforyou] my [/b]."
+    end
+  end
+
+  context "with case-insensitive input" do
+    it "should handle upper case tags" do
+      "[P]Text and now [B]nested.[/B][/P]".bbcode_to_html.should == "<p>Text and now <strong>nested.</strong></p>"
+    end
+
+    it "should handle mixed upper and lower case tags" do
+      "[p]Text and now [B]nested.[/b][/P]".bbcode_to_html.should == "<p>Text and now <strong>nested.</strong></p>"
     end
   end
 end
