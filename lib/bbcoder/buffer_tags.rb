@@ -11,9 +11,9 @@ class BBCoder
     def push(tag)
       tag, meta = if tag.include?("=")
                     splits = tag.split("=")
-                    [splits.shift.to_sym, splits.join]
+                    [splits.shift.downcase.to_sym, splits.join('=')]
                   else
-                    [tag.to_sym, nil]
+                    [tag.downcase.to_sym, nil]
                   end
 
       if criteria_met?(tag)
@@ -26,6 +26,7 @@ class BBCoder
 
     # logic when popping specific tag
     def pop(tag)
+      tag = tag.downcase.to_sym
       if empty? || !include?(tag)
         buffer.push("[/#{tag}]")
       elsif last == tag
