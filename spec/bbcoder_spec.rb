@@ -103,5 +103,19 @@ EOS
       "[p]Text and now [B]nested.[/b][/P]".bbcode_to_html.should == "<p>Text and now <strong>nested.</strong></p>"
     end
   end
+
+  context "with singular tags" do
+    it "should handle one singular tag" do
+      "[sub=subscriptage]".bbcode_to_html.should == "<sub>subscriptage</sub>"
+    end
+
+    it "should handle multiple singular tags" do
+      "[p]I [sub=me] think [sub=thought]; therefore [sup=well] I am[/p]".bbcode_to_html.should == "<p>I <sub>me</sub> think <sub>thought</sub>; therefore <sup>well</sup> I am</p>"
+    end
+
+    it "should handle singular tags in non singular form" do
+      "[p]I [sub]me[/sub] think [sub]thought[/sub]; therefore [sup]well[/sup] I am[/p]".bbcode_to_html.should == "<p>I <sub>me</sub> think <sub>thought</sub>; therefore <sup>well</sup> I am</p>"
+    end
+  end
 end
 

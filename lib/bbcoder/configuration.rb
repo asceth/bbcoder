@@ -11,6 +11,7 @@ class BBCoder
         block.binding.eval <<-EOS
           def meta; @meta; end
           def content; @content; end
+          def singular?; @singularity; end
         EOS
       end
       @@tags[name.to_sym] = BBCoder::Tag.new(name.to_sym, options.merge(:block => block))

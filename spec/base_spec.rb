@@ -32,6 +32,10 @@ describe BBCoder do
     it "should split tags up properly" do
       subject.raw.should == ["[p]", "Text and now ", "[b]", "bolded.", "[/b]", "[/p]"]
     end
+
+    it "should split tags up properly without content" do
+      BBCoder.new("[b][/b][u][/u]").raw.should == ["[b]", "[/b]", "[u]", "[/u]"]
+    end
   end
 
   context "#parse" do

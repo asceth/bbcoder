@@ -21,11 +21,11 @@ class BBCoder
     raw.each do |data|
       case data
       when /\[\/([^\]]+)\]/
-        buffer.tags.pop($1)
+        buffer.tags.pop($1) # popping end tag
       when /\[([^\]]+)\]/
-        buffer.tags.push($1)
+        buffer.tags.push($1) # pushing start tag
       else
-        buffer.push(data)
+        buffer.push(data) # content
       end
     end
 

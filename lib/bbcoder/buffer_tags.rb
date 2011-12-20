@@ -27,6 +27,8 @@ class BBCoder
     # logic when popping specific tag
     def pop(tag)
       tag = tag.downcase.to_sym
+
+      # no more tags left to pop || this tag isn't in the list
       if empty? || !include?(tag)
         buffer.push("[/#{tag}]")
       elsif last == tag
@@ -43,7 +45,8 @@ class BBCoder
       limit = size if limit.nil?
 
       1.upto(limit).to_a.collect do
-        [BBCoder::Tag.reform(_internal.pop, _meta.delete(size+1)), buffer.pop(+1)].join  # +1 depth modifier for the buffer
+        # singular tags are caught in the handle method
+        [BBCoder::Tag.handle(_internal.pop, _meta.delete(size+1)), buffer.pop(+1)].join  # +1 depth modifier for the buffer
       end.reverse.join
     end
 

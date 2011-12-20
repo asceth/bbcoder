@@ -65,5 +65,13 @@ BBCoder.configure do
 <iframe width="560" height="349" src="http://www.youtube.com/embed/#{content}" frameborder="0" allowfullscreen></iframe>
     EOS
   end
+
+  tag :sub, :singular => true do
+    %(<sub>#{singular? ? meta : content}</sub>)
+  end
+
+  tag :sup, :singular => true do
+    %(<sup>#{singular? ? meta : content}</sup>)
+  end
 end
 
