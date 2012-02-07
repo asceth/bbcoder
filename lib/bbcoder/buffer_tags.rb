@@ -8,29 +8,29 @@ class BBCoder
       @_meta = {}
     end
 
-    def push(tag)
-      tag, meta = if tag.include?("=")
-                    splits = tag.split("=")
+    def push(original_tag)
+      tag, meta = if original_tag.include?("=")
+                    splits = original_tag.split("=")
                     [splits.shift.downcase.to_sym, splits.join('=')]
                   else
-                    [tag.downcase.to_sym, nil]
+                    [original_tag.downcase.to_sym, nil]
                   end
 
       if criteria_met?(tag)
         _internal.push(tag)
         _meta[size] = meta
       else
-        buffer.push(BBCoder::Tag.reform(tag, meta))
+        buffer.push(BBCoder::Tag.reform(original_tag, meta))
       end
     end
 
     # logic when popping specific tag
-    def pop(tag)
-      tag = tag.downcase.to_sym
+    def pop(original_tag)
+      tag = original_tag.downcase.to_sym
 
       # no more tags left to pop || this tag isn't in the list
       if empty? || !include?(tag)
-        buffer.push("[/#{tag}]")
+        buffer.push("[/#{original_tag}]")
       elsif last == tag
         buffer.push(BBCoder::Tag.to_html(_internal.pop, _meta.delete(size+1), buffer.pop(+1)))
       elsif include?(tag)

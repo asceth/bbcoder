@@ -37,6 +37,18 @@ EOS
       '[p]Bye :[[/p]'.bbcode_to_html.should == '<p>Bye :[</p>'
     end
 
+    it "should act cool and parse content with lots of [ and ] in it" do
+      '[b]Bye :[ Bye :[ Miss :] [i]American :] wait...[/i] :[]..:()[/b]'.bbcode_to_html.should == '<strong>Bye :[ Bye :[ Miss :] <em>American :] wait...</em> :[]..:()</strong>'
+    end
+
+    it "should not downcase content that looks like a tag when being reformed" do
+      '[ Miss ]'.bbcode_to_html.should == '[ Miss ]'
+    end
+
+    it "should not downcase content that looks like a tag when being reformed" do
+      '[/ Mister ]'.bbcode_to_html.should == '[/ Mister ]'
+    end
+
     it "should return tags as text on blank content" do
       '[img][/img]'.bbcode_to_html.should == '[img][/img]'
     end
