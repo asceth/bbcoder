@@ -8,7 +8,7 @@ Features
 
 * Tags supported by default:
 
-p, b, i, u, s, del, ins, ol, ul, li, dl, dt, dd, quote, code, spoiler, url, img, sub, sup
+p, b, i, u, s, del, ins, ol, ul, li, dl, dt, dd, quote, code, spoiler, url, img, youtube, sub, sup
 
 Usage
 --------
