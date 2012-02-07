@@ -10,7 +10,7 @@ class BBCoder
   end
 
   def initialize(text)
-    @raw = text.split(/(\[[^\]]+\])/i).select {|string| string.size > 0}
+    @raw = text.split(/(\[[^\[\]]+\])/i).select {|string| string.size > 0}
   end
 
   def to_html

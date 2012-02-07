@@ -29,6 +29,14 @@ EOS
       string.bbcode_to_html.should == result
     end
 
+    it "should parse content with ] in it" do
+      '[p]Hi :][/p]'.bbcode_to_html.should == '<p>Hi :]</p>'
+    end
+
+    it "should parse content with [ in it" do
+      '[p]Bye :[[/p]'.bbcode_to_html.should == '<p>Bye :[</p>'
+    end
+
     it "should return tags as text on blank content" do
       '[img][/img]'.bbcode_to_html.should == '[img][/img]'
     end
