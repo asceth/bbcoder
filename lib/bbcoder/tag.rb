@@ -8,7 +8,7 @@ class BBCoder
     end
 
     def to_html(meta, content, singularity = false)
-      return self.class.reform(name, meta, content, true) unless content_valid?(content)
+      return self.class.reform(name, meta, content, singularity, true) unless content_valid?(content, singularity) && meta_valid?(meta, singularity)
 
       if options[:block].nil?
         "<#{options[:as]}>#{content}</#{options[:as]}>"
@@ -22,12 +22,33 @@ class BBCoder
       end
     end
 
-    def content_valid?(content)
-      return true if content.nil? && options[:singular]
-      return false if content.nil?
-      return true if options[:match].nil?
+    def meta_valid?(meta, singularity)
+      return true if meta.nil?
 
-      return !content.match(options[:match]).nil?
+      unless options[:match].nil?
+        return false if meta.match(options[:match]).nil?
+      end
+
+      unless options[:match_meta].nil?
+        return false if meta.match(options[:match_meta]).nil?
+      end
+
+      return true
+    end
+
+    def content_valid?(content, singularity)
+      return true if content.nil? && (options[:singular] && singularity)
+      return false if content.nil?
+
+      unless options[:match].nil?
+        return false if content.match(options[:match]).nil?
+      end
+
+      unless options[:match_content].nil?
+        return false if content.match(options[:match_content]).nil?
+      end
+
+      return true
     end
 
     def parents
@@ -53,8 +74,8 @@ class BBCoder
         end
       end
 
-      def reform(tag, meta, content = nil, force_end = false)
-        if content.nil? && !force_end
+      def reform(tag, meta, content = nil, singularity = false, force_end = false)
+        if (content.nil? && !force_end) || singularity
           %(#{reform_open(tag, meta)})
         else
           %(#{reform_open(tag, meta)}#{content}#{reform_end(tag)})

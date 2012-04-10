@@ -136,6 +136,20 @@ EOS
     it "should handle singular tags in non singular form" do
       "[p]I [sub]me[/sub] think [sub]thought[/sub]; therefore [sup]well[/sup] I am[/p]".bbcode_to_html.should == "<p>I <sub>me</sub> think <sub>thought</sub>; therefore <sup>well</sup> I am</p>"
     end
+
+    it "should handle incorrect singular tags" do
+      "[img=image.exe]".bbcode_to_html.should == "[img=image.exe]"
+    end
+  end
+
+  context "with bad matches" do
+    it "should handle an img tag match for content" do
+      "[img]image.exe[/img]".bbcode_to_html.should == "[img]image.exe[/img]"
+    end
+
+    it "should handle an img tag match for meta" do
+      "[img=image.exe]".bbcode_to_html.should == "[img=image.exe]"
+    end
   end
 end
 

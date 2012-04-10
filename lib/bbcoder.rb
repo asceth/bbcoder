@@ -56,8 +56,8 @@ BBCoder.configure do
     end
   end
 
-  tag :img, :match => /^.*(png|bmp|jpg|gif)$/ do
-    %(<a href="#{content}"><img src="#{content}" /></a>)
+  tag :img, :match => /^.*(png|bmp|jpg|gif)$/, :singular => true do
+    %(<a href="#{singular? ? meta : content}"><img src="#{singular? ? meta : content}" /></a>)
   end
 
   tag :youtube do
