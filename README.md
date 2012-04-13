@@ -41,8 +41,8 @@ Configuration Examples
       tag :ol
       tag :li, :parents => [:ol, :ul]
 
-      tag :img, :match => /^.*(png|bmp|jpg|gif)$/ do
-        %(<a href="#{content}"><img src="#{content}" /></a>)
+      tag :img, :match => /^.*(png|bmp|jpe?g|gif)$/ do
+        %(<a href="#{singular? ? meta : content}"><img src="#{singular? ? meta : content}" /></a>)
       end
 
       tag :code do
@@ -66,7 +66,9 @@ Configuration Examples
 Options for #tag
 
 * :as (symbol) -> use this as the html element ([b] becomes strong)
-* :match (regex) -> convert this tag and its content to html only if the content matches the regex
+* :match (regex) -> convert this tag and its content to html only if the content and meta matches the regex (see img tag above for example)
+* :match_meta (regex) -> same as :match except only for meta
+* :match_content (regex) -> same as :match except only for content
 * :parents ([symbol]) -> ignore this tag if there is no open tag that matches its parents
 * :singular (true|false) -> use this if the tag does not require an ending tag
 
