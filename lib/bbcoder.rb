@@ -56,7 +56,7 @@ BBCoder.configure do
     end
   end
 
-  tag :img, :match => /^.*(png|bmp|jpg|gif)$/, :singular => true do
+  tag :img, :match => /^.*(png|bmp|jpe?g|gif)$/, :singular => true do
     %(<a href="#{singular? ? meta : content}"><img src="#{singular? ? meta : content}" /></a>)
   end
 

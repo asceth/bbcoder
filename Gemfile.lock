@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    bbcoder (0.2.0)
+    bbcoder (1.0.0)
 
 GEM
   remote: http://rubygems.org/
