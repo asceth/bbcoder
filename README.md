@@ -17,10 +17,41 @@ Usage
     # or
     "[p]my string[/p]".bbcode_to_html
 
+See configuration section below on adding new parseable tags
+
+
 Install
 -------
 
     gem install bbcoder
+
+
+Autolinking, Smileys, XSS prevention, Newlines
+--------------------------------------
+
+bbcoder is not meant to handle smileys, autolinking or xss attacks.  There are other libraries to help do this for us.  I also do not consider these elements part of bbcode itself (even though there is no standard) so bbcoder will not provide support for them except in this README to give examples on how to combine them together.
+
+
+#### Autolinking
+Rails 2.x has a helper auto_link by default that can do this for you.  For Rails 3.x you can install the rails_autolink gem.
+
+
+#### Smileys
+At the moment I use a jquery library to display smileys after the page has loaded.  The library I use https://github.com/JangoSteve/jQuery-CSSEmoticons however it would be nice to see a gem that can parse smileys out of text into appropriate html elements with specific tags.  CSS3 font-face anyone?
+
+
+#### XSS (currently under review)
+Since bbcoder outputs html we have to html_safe it for Rails 3 which can cause problems from a security point of view. I use the Sanitize gem to clean the input before bbcoder transforms it into html.  https://github.com/rgrove/sanitize
+
+
+#### Newlines
+When typing into a textarea a user will use newlines to indicate space between lines.  This is not translated properly into br tags.  I do not consider this a function for bbcoder either atm, however I do use it in combination with XSS/Sanitize above:
+
+
+##### XSS + Newlines Helper
+      def bbcode(text)
+        Sanitize.clean(text.to_s).bbcode_to_html.gsub(/\n|\r\n/, "<br />").html_safe
+      end
 
 
 Configuration Examples
