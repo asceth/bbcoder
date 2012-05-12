@@ -60,6 +60,8 @@ Configuration Examples
           %(<a href="#{meta}">#{content}</a>)
         end
       end
+
+      remove :spoiler # Removes [spoiler]
     end
 
 
@@ -79,6 +81,7 @@ When you pass a block to #tag it is expecting you to return a string.  You have 
 * content -> Everything between the two tags (with [b]strong arm[/b] content returns 'strong arm')
 * singular? -> Tells you if this tag is being parsed in singular form or if it had an ending tag (affects if content has any data)
 
+You can remove all configured tags by calling `BBCoder.configuration.clear`.
 
 Author
 ------

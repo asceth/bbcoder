@@ -6,6 +6,14 @@ class BBCoder
       @@tags[value]
     end
 
+    def clear
+      @@tags = {}
+    end
+
+    def remove name
+      @@tags.delete(name.to_sym)
+    end
+
     def tag(name, options = {}, &block)
       unless block.nil?
         block.binding.eval <<-EOS
