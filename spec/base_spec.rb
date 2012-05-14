@@ -5,8 +5,21 @@ describe BBCoder do
   subject { BBCoder.new("[p]Text and now [b]bolded.[/b][/p]") }
 
   context "#configuration" do
+    before do
+      @tags = BBCoder::Configuration.class_variable_get(:@@tags).clone
+    end
+
+    after do
+      BBCoder::Configuration.class_variable_set(:@@tags, @tags)
+    end
+
     it "should return the same object for multiple calls" do
       BBCoder.configuration.should == BBCoder.configuration
+    end
+
+    it "should allow to clear the configuration" do
+      BBCoder.configuration.clear
+      BBCoder.configuration[:spoiler].should be_nil
     end
   end
 
@@ -17,6 +30,14 @@ describe BBCoder do
   end
 
   context "#configure" do
+    before do
+      @tags = BBCoder::Configuration.class_variable_get(:@@tags).clone
+    end
+
+    after do
+      BBCoder::Configuration.class_variable_set(:@@tags, @tags)
+    end
+
     it "should fail without a block" do
       lambda { BBCoder.configure }.should raise_error
     end
@@ -25,6 +46,13 @@ describe BBCoder do
       block = Proc.new { tag :p }
       mock(BBCoder).configuration.stub!.instance_eval(&block)
       BBCoder.configure(&block)
+    end
+
+    it "should be able to remove a tag" do
+      BBCoder.configure do
+        remove :spoiler
+      end
+      BBCoder.configuration[:spoiler].should be_nil
     end
   end
 
