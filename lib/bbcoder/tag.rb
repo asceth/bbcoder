@@ -8,7 +8,9 @@ class BBCoder
     end
 
     def to_html(meta, content, singularity = false)
-      return self.class.reform(name, meta, content, singularity, true) unless content_valid?(content, singularity) && meta_valid?(meta, singularity)
+      unless content_valid?(content, singularity) && meta_valid?(meta, singularity) && link_valid?(meta, content)
+        return self.class.reform(name, meta, content, singularity, true)
+      end
 
       if options[:block].nil?
         "<#{options[:as]}>#{content}</#{options[:as]}>"
@@ -20,6 +22,19 @@ class BBCoder
         EOS
         options[:block].call
       end
+    end
+
+    def link_valid?(meta, content)
+      # only run if we have a :match_link
+      return true if options[:match_link].nil?
+
+      if meta.nil? || meta.empty?
+        return false if content.match(options[:match_link]).nil?
+      else
+        return false if meta.match(options[:match_link]).nil?
+      end
+
+      return true
     end
 
     def meta_valid?(meta, singularity)

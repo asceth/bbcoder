@@ -48,7 +48,7 @@ BBCoder.configure do
     EOS
   end
 
-  tag :url do
+  tag :url, :match_link => /^https?:\/\// do
     if meta.nil? || meta.empty?
       %(<a href="#{content}">#{content}</a>)
     else
@@ -56,7 +56,7 @@ BBCoder.configure do
     end
   end
 
-  tag :img, :match => /^.*(png|bmp|jpe?g|gif)$/, :singular => true do
+  tag :img, :match => /^https?:\/\/.*(png|bmp|jpe?g|gif)$/, :singular => true do
     %(<a href="#{singular? ? meta : content}"><img src="#{singular? ? meta : content}" /></a>)
   end
 

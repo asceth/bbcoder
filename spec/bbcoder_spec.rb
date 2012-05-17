@@ -151,5 +151,46 @@ EOS
       "[img=image.exe]".bbcode_to_html.should == "[img=image.exe]"
     end
   end
+
+  context "with xss attacks" do
+    it "should reject anything other than http/https for url tags" do
+      "[url=javascript:alert('You got hacked!')]hacked[/url]".bbcode_to_html.should == "[url=javascript:alert('You got hacked!')]hacked[/url]"
+      "[url]javascript:alert('You got hacked!')[/url]".bbcode_to_html.should == "[url]javascript:alert('You got hacked!')[/url]"
+
+      '[url=javascript:window.alert("You got hacked!")]click[/url]'.bbcode_to_html.should == '[url=javascript:window.alert("You got hacked!")]click[/url]'
+    end
+
+    it "should reject anything other than http/https for img tags" do
+      "[img=javascript:alert('XSS');jpg]".bbcode_to_html.should == "[img=javascript:alert('XSS');jpg]"
+      "[img]javascript:alert('XSS');png[/img]".bbcode_to_html.should == "[img]javascript:alert('XSS');png[/img]"
+      '[img]javascript:window.alert("You got hacked!")//.jpg[/img]'.bbcode_to_html.should == '[img]javascript:window.alert("You got hacked!")//.jpg[/img]'
+
+      attack = "[img]
+j
+a
+v
+a
+s
+c
+r
+i
+p
+t
+:
+a
+l
+e
+r
+t
+(
+'
+X
+S
+S
+'
+);jpg[/img]"
+        attack.bbcode_to_html.should == attack
+    end
+  end
 end
 

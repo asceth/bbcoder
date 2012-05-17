@@ -40,8 +40,8 @@ Rails 2.x has a helper auto_link by default that can do this for you.  For Rails
 At the moment I use a jquery library to display smileys after the page has loaded.  The library I use https://github.com/JangoSteve/jQuery-CSSEmoticons however it would be nice to see a gem that can parse smileys out of text into appropriate html elements with specific tags.  CSS3 font-face anyone?
 
 
-#### XSS (currently under review)
-Since bbcoder outputs html we have to html_safe it for Rails 3 which can cause problems from a security point of view. I use the Sanitize gem to clean the input before bbcoder transforms it into html.  https://github.com/rgrove/sanitize
+#### XSS
+bbcoder will now do a whitelist check against img tags and url tags by default and only allow http/https links.  You can override this by putting in your own configuration if you wish.  If you find any other flaws or holes please report so we can fix.  bbcoder will not sanitize the rest of your input, it will only attempt to whitelist the actual html elements it will generate.
 
 
 #### Newlines
@@ -72,7 +72,15 @@ Configuration Examples
       tag :ol
       tag :li, :parents => [:ol, :ul]
 
-      tag :img, :match => /^.*(png|bmp|jpe?g|gif)$/ do
+      tag :url, :match_link => /^https?:\/\// do
+        if meta.nil? || meta.empty?
+          %(<a href="#{content}">#{content}</a>)
+        else
+          %(<a href="#{meta}">#{content}</a>)
+        end
+      end
+
+      tag :img, :match => /^https?:\/\/.*(png|bmp|jpe?g|gif)$/, :singular => true do
         %(<a href="#{singular? ? meta : content}"><img src="#{singular? ? meta : content}" /></a>)
       end
 
@@ -82,14 +90,6 @@ Configuration Examples
       <pre>#{content}</pre>
     </div>
         EOS
-      end
-
-      tag :url do
-        if meta.nil? || meta.empty?
-          %(<a href="#{content}">#{content}</a>)
-        else
-          %(<a href="#{meta}">#{content}</a>)
-        end
       end
 
       remove :spoiler # Removes [spoiler]
@@ -102,6 +102,7 @@ Options for #tag
 * :match (regex) -> convert this tag and its content to html only if the content and meta matches the regex (see img tag above for example)
 * :match_meta (regex) -> same as :match except only for meta
 * :match_content (regex) -> same as :match except only for content
+* :match_link (regex) -> special :match case, will match meta if it exists otherwise tries to match content (see url tag for usage)
 * :parents ([symbol]) -> ignore this tag if there is no open tag that matches its parents
 * :singular (true|false) -> use this if the tag does not require an ending tag
 
