@@ -13,9 +13,10 @@ p, b, i, u, s, del, ins, ol, ul, li, dl, dt, dd, quote, code, spoiler, url, img,
 Usage
 --------
 
-    BBCoder.new(text).to_html
+    BBCoder.new(h(text)).to_html
     # or
-    "[p]my string[/p]".bbcode_to_html
+    h("[p]my string[/p]").bbcode_to_html
+    # h() is a Rails helper function, you may use CGI.escapeHTML instead
 
 See configuration section below on adding new parseable tags
 
@@ -41,6 +42,8 @@ At the moment I use a jquery library to display smileys after the page has loade
 
 
 #### XSS
+Please make sure you escaped or sanitized all HTML in the string before passing it to bbcoder!
+
 bbcoder will now do a whitelist check against img tags and url tags by default and only allow http/https links.  You can override this by putting in your own configuration if you wish.  If you find any other flaws or holes please report so we can fix.  bbcoder will not sanitize the rest of your input, it will only attempt to whitelist the actual html elements it will generate.
 
 
