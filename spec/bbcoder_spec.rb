@@ -2,6 +2,33 @@ require 'spec_helper'
 
 describe BBCoder do
 
+  context "quotes" do
+    it "displays the quoted party if provided" do
+      string = "[quote=weedman]Said some thing about some stuff[/quote]"
+
+      string.bbcode_to_html.should == <<-EOS
+<fieldset>
+  <legend>weedman says</legend>
+  <blockquote>
+    Said some thing about some stuff
+  </blockquote>
+</fieldset>
+      EOS
+    end
+
+    it "has no legend if no quoted party provided" do
+      string = "[quote]Said some thing about some stuff[/quote]"
+
+      string.bbcode_to_html.should == <<-EOS
+<fieldset>
+  <blockquote>
+    Said some thing about some stuff
+  </blockquote>
+</fieldset>
+      EOS
+    end
+  end
+
   context "with dirty input" do
     it "should parse content with \" in it" do
       '[p]Text phrase: "going away"[/p]'.bbcode_to_html.should == '<p>Text phrase: "going away"</p>'
@@ -20,7 +47,7 @@ describe BBCoder do
 
       result = <<-EOS
 <fieldset>
-<legend>weedman says</legend>
+  <legend>weedman says</legend>
   <blockquote>
     YES I STICKY IT ALL oF YOU WHO DON\'T LIKE it SEND YOUR HATE HERE\n\nhttp://www.gamesyn.com/plugin.php?plugin=PrivateMessages&file=message_send.php&id=20&tid=1583\n\n:} have a good day
   </blockquote>
@@ -67,7 +94,6 @@ EOS
       output = "[p]Text and now [b]bold then [i]italics[/i][/b][/p] and then a [quote]Quote[/quote]".bbcode_to_html
       output.should == <<-EOS
 <p>Text and now <strong>bold then <em>italics</em></strong></p> and then a <fieldset>
-<legend> says</legend>
   <blockquote>
     Quote
   </blockquote>
