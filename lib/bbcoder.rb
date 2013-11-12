@@ -21,9 +21,10 @@ BBCoder.configure do
   tag :dd, :parents => [:dl]
 
   tag :quote do
+    quoted = meta.empty? ? '' : "\n  <legend>#{meta} says</legend>"
+
     <<-EOS
-<fieldset>
-<legend>#{meta} says</legend>
+<fieldset>#{quoted}
   <blockquote>
     #{content}
   </blockquote>
