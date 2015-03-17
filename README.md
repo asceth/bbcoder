@@ -1,7 +1,6 @@
 Status
 --------
-I consider bbcoder to be stable so you won't see many updates to it in the future.  It is perfectly fine to use in prodution.  The gem itself is pretty simple so it should work across
-the board with newer frameworks etc.  If you find any issues or think it needs a feature please submit an issue.
+I consider bbcoder to be stable so you won't see many updates to it in the future.  It is perfectly fine to use in production.  The gem itself is pretty simple so it should work across the board with newer frameworks etc.  If you find any issues or think it needs a feature please submit an issue.
 
 
 Features
