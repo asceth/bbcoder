@@ -7,7 +7,7 @@ class BBCoder
       @options = options.merge(:as => (options[:as] || name), :singular => (options[:singular] || false))
     end
 
-    def to_html(meta, content, singularity = false)
+    def to_html(depth, meta, content, singularity = false)
       unless content_valid?(content, singularity) && meta_valid?(meta, singularity) && link_valid?(meta, content)
         return self.class.reform(name, meta, content, singularity, true)
       end
@@ -16,6 +16,7 @@ class BBCoder
         "<#{options[:as]}>#{content}</#{options[:as]}>"
       else
         options[:block].binding.eval <<-EOS
+          @depth = #{depth.to_s}
           @meta = %Q{#{Regexp.escape(meta.to_s)}}
           @content = %Q{#{Regexp.escape(content.to_s)}}
           @singularity = #{singularity.to_s}
@@ -75,16 +76,17 @@ class BBCoder
     end
 
     module ClassMethods
-      def to_html(tag, meta, content, singularity = false)
-        BBCoder.configuration[tag].to_html(meta, content, singularity)
+      def to_html(tag, depth, meta, content, singularity = false)
+        BBCoder.configuration[tag].to_html(depth, meta, content, singularity)
       end
 
       # need #handle so we don't get into a reform loop from to_html
       # checking content validity
-      def handle(tag, meta, content = nil, force_end = false)
+      def handle(tag, depth, meta, content = nil, force_end = false)
         if BBCoder.configuration[tag] && BBCoder.configuration[tag].singular?
-          to_html(tag, meta, content, true)
+          to_html(tag, depth, meta, content, true)
         else
+          # reform doesn't really care about depth, so we don't pass it in.
           reform(tag, meta, content, force_end)
         end
       end
