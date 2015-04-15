@@ -87,5 +87,20 @@ describe BBCoder::Tag do
       end
     end
   end # #content_valid?
-end
 
+
+
+  #
+  # Test our depth logic and verify we are binding the variable:
+  # TODO
+  #
+  context "with depths" do
+    before do
+      @depth = BBCoder::Tag.new("strong", :block => proc { "<strong>depth: #{depth} - #{content}</strong>" })
+    end
+
+    it "should allow blocks to use depth as a binded variable" do
+      @depth.to_html(0, nil, "test", false).should == "<strong>depth: 0 - test</strong>"
+    end
+  end # context "with depths"
+end

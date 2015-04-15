@@ -16,10 +16,14 @@ class BBCoder
         "<#{options[:as]}>#{content}</#{options[:as]}>"
       else
         options[:block].binding.eval <<-EOS
-          @depth = #{depth.to_s}
+          @depth = #{depth}
           @meta = %Q{#{Regexp.escape(meta.to_s)}}
           @content = %Q{#{Regexp.escape(content.to_s)}}
           @singularity = #{singularity.to_s}
+          def depth; @depth; end
+          def meta; @meta; end
+          def content; @content; end
+          def singular?; @singularity; end
         EOS
         options[:block].call
       end

@@ -26,13 +26,17 @@ class BBCoder
 
     # logic when popping specific tag
     def pop(original_tag)
-      tag = original_tag.downcase.to_sym
+      tag = if original_tag.is_a?(Symbol)
+              original_tag
+            else
+              original_tag.downcase.to_sym
+            end
 
       # no more tags left to pop || this tag isn't in the list
       if empty? || !include?(tag)
         buffer.push("[/#{original_tag}]")
       elsif last == tag
-        buffer.push(BBCoder::Tag.to_html(_internal.pop, _meta.delete(size+1), buffer.pop(+1)))
+        buffer.push(BBCoder::Tag.to_html(_internal.pop, buffer.depth, _meta.delete(size+1), buffer.pop(+1)))
       elsif include?(tag)
         # repeats pop(tag) until we reach the last == tag
         buffer.push(join(+1))
@@ -46,7 +50,7 @@ class BBCoder
 
       1.upto(limit).to_a.collect do
         # singular tags are caught in the handle method
-        [BBCoder::Tag.handle(_internal.pop, _meta.delete(size+1)), buffer.pop(+1)].join  # +1 depth modifier for the buffer
+        [BBCoder::Tag.handle(_internal.pop, buffer.depth, _meta.delete(size+1)), buffer.pop(+1)].join  # +1 depth modifier for the buffer
       end.reverse.join
     end
 
