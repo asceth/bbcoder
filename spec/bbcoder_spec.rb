@@ -175,7 +175,7 @@ EOS
 
     it "should handle an img tag match for meta" do
       "[img=image.exe]".bbcode_to_html.should == "[img=image.exe]"
-    end
+p    end
   end
 
   context "with xss attacks" do
@@ -219,4 +219,3 @@ S
     end
   end
 end
-

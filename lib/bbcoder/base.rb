@@ -18,6 +18,15 @@ class BBCoder
   end
 
   def parse
+    _parse
+    buffer.join
+  end
+
+  def buffer
+    @buffer ||= BBCoder::Buffer.new
+  end
+
+  def _parse
     raw.each do |data|
       case data
       when /\[\/([^\]]+)\]/
@@ -28,12 +37,5 @@ class BBCoder
         buffer.push(data) # content
       end
     end
-
-    buffer.join
-  end
-
-  def buffer
-    @buffer ||= BBCoder::Buffer.new
-  end
+  end # _parse
 end
-

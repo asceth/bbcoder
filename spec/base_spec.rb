@@ -6,11 +6,11 @@ describe BBCoder do
 
   context "#configuration" do
     before do
-      @tags = BBCoder::Configuration.class_variable_get(:@@tags).clone
+      @tags = BBCoder.configuration.tags.clone
     end
 
     after do
-      BBCoder::Configuration.class_variable_set(:@@tags, @tags)
+      BBCoder.configuration.tags = @tags
     end
 
     it "should return the same object for multiple calls" do
@@ -31,11 +31,11 @@ describe BBCoder do
 
   context "#configure" do
     before do
-      @tags = BBCoder::Configuration.class_variable_get(:@@tags).clone
+      @tags = BBCoder.configuration.tags.clone
     end
 
     after do
-      BBCoder::Configuration.class_variable_set(:@@tags, @tags)
+      BBCoder.configuration.tags = @tags
     end
 
     it "should fail without a block" do
@@ -44,8 +44,9 @@ describe BBCoder do
 
     it "should instance_eval the block onto configuration" do
       block = Proc.new { tag :p }
-      mock(BBCoder).configuration.stub!.instance_eval(&block)
       BBCoder.configure(&block)
+
+      BBCoder.configuration.tags[:p].should_not be_nil
     end
 
     it "should be able to remove a tag" do
@@ -75,4 +76,3 @@ describe BBCoder do
     end
   end
 end
-
