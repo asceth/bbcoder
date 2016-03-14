@@ -63,7 +63,7 @@ BBCoder.configure do
 
   tag :youtube do
     <<-EOS
-<iframe width="560" height="349" src="http://www.youtube.com/embed/#{content}" frameborder="0" allowfullscreen></iframe>
+<iframe width="560" height="349" src="https://www.youtube.com/embed/#{content}" frameborder="0" allowfullscreen></iframe>
     EOS
   end
 
